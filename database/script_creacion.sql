@@ -31,3 +31,40 @@ CREATE TABLE SolicitudAdopcion (
     id_mascota INT,
     FOREIGN KEY (id_mascota) REFERENCES Mascota(id_mascota)
 );
+
+
+-- Insertar un agente voluntario
+INSERT INTO AgenteVoluntario (nombre, email, password) 
+VALUES ('Camila', 'camila@compatitas.com', 'hash1234');
+
+-- Insertar mascotas asociadas al agente (id_agente = 1)
+INSERT INTO Mascota (nombre, estado, descripcion, id_agente) 
+VALUES ('Luna', 'Adoptable', 'Mestiza, tamaño mediano, muy juguetona', 1),
+       ('Milo', 'En recuperación', 'Gato rubio, tranquilo, requiere dieta especial', 1);
+
+-- Insertar una solicitud de adopción para la mascota Luna (id_mascota = 1)
+INSERT INTO SolicitudAdopcion (nombre_interesado, telefono, email, mensaje, id_mascota) 
+VALUES ('Juan Pérez', '3515551234', 'juan@email.com', 'Me encantaría adoptar a Luna.', 1);
+
+
+
+-- Consultar las solicitudes cruzando datos con la mascota y el agente a cargo
+SELECT 
+    s.nombre_interesado AS 'Interesado',
+    s.email AS 'Contacto',
+    m.nombre AS 'Mascota Solicitada',
+    m.estado AS 'Estado Actual',
+    a.nombre AS 'Agente Responsable'
+FROM 
+    solicitudes_adopcion s
+JOIN 
+    Mascota m ON s.id_mascota = m.id_mascota
+JOIN 
+    AgenteVoluntario a ON m.id_agente = a.id_agente;
+
+
+-- Se borran en orden inverso a la creación para no romper la integridad referencial
+DELETE FROM solicitudes_adopcion; 
+DELETE FROM mascotas; 
+DELETE FROM agentes_voluntarios;
+
