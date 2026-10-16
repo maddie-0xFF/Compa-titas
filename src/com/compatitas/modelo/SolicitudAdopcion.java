@@ -18,13 +18,22 @@ public class SolicitudAdopcion {
     }
 
     public boolean registrarSolicitud() {
+        if (!validarDatos()) {
+            throw new IllegalArgumentException("Los datos de contacto (nombre y email) son obligatorios.");
+        }
         System.out.println("Solicitud registrada con éxito de " + this.nombreInteresado + " para la mascota ID: " + this.idMascota);
         return true;
     }
 
     public boolean validarDatos() {
-        return this.nombreInteresado != null && !this.nombreInteresado.isEmpty() &&
-               this.email != null && !this.email.isEmpty();
+        return this.nombreInteresado != null && !this.nombreInteresado.trim().isEmpty() &&
+               this.email != null && !this.email.trim().isEmpty();
+    }
+
+    public String mostrarResumen() {
+        return "Solicitud #" + idSolicitud + " | Interesado: " + nombreInteresado + 
+               " (" + email + ", Tel: " + telefono + ") | Mascota ID: " + idMascota + 
+               " | Mensaje: \"" + mensaje + "\"";
     }
 
     // Getters

@@ -6,7 +6,7 @@ public class AgenteVoluntario {
     private int idAgente;
     private String nombre;
     private String email;
-    private String contrasena; // Agregado para coincidir con la base de datos
+    private String contrasena;
 
     public AgenteVoluntario(int idAgente, String nombre, String email, String contrasena) {
         this.idAgente = idAgente;
@@ -15,10 +15,24 @@ public class AgenteVoluntario {
         this.contrasena = contrasena;
     }
 
-    // Método actualizado para el CU02
-    public Mascota registrarNuevaMascota(String nombre, int edad, String estado, String descripcion) {
-        System.out.println("El agente " + this.nombre + " está registrando a " + nombre);
-        return new Mascota(siguienteIdMascota++, nombre, edad, estado, descripcion, this.idAgente); 
+    public boolean iniciarSesion(String email, String pass) {
+        return this.email.equalsIgnoreCase(email) && this.contrasena.equals(pass);
+    }
+
+    // Sobrecarga 1: Registrar un Perro (CU02)
+    public Mascota registrarNuevaMascota(String nombre, int edad, String estado, String descripcion, String tamanio) {
+        System.out.println("El agente " + this.nombre + " está registrando al perro " + nombre + "...");
+        Perro nuevoPerro = new Perro(siguienteIdMascota++, nombre, edad, estado, descripcion, this.idAgente, tamanio);
+        System.out.println("Mascota registrada exitosamente.");
+        return nuevoPerro;
+    }
+
+    // Sobrecarga 2: Registrar un Gato (CU02)
+    public Mascota registrarNuevaMascota(String nombre, int edad, String estado, String descripcion, boolean requiereRed) {
+        System.out.println("El agente " + this.nombre + " está registrando al gato " + nombre + "...");
+        Gato nuevoGato = new Gato(siguienteIdMascota++, nombre, edad, estado, descripcion, this.idAgente, requiereRed);
+        System.out.println("Mascota registrada exitosamente.");
+        return nuevoGato;
     }
 
     // Getters

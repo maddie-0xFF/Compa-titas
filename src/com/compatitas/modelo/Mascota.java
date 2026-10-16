@@ -1,15 +1,15 @@
 package com.compatitas.modelo;
 
-public class Mascota {
+public abstract class Mascota {
     public static final String ESTADO_EN_RECUPERACION = "En recuperación";
     public static final String ESTADO_ADOPTABLE = "Adoptable";
 
-    private int idMascota;
-    private String nombre;
-    private int edad; // Agregado para el caso de prueba CPF02
-    private String estado; 
-    private String descripcion;
-    private int idAgente; // Clave foránea
+    protected int idMascota;
+    protected String nombre;
+    protected int edad; // Agregado para el caso de prueba CPF02
+    protected String estado; 
+    protected String descripcion;
+    protected int idAgente; // Clave foránea
 
     public Mascota(int idMascota, String nombre, int edad, String estado, String descripcion, int idAgente) {
         this.idMascota = idMascota;
@@ -34,17 +34,26 @@ public class Mascota {
         System.out.println("El estado de " + this.nombre + " ha cambiado a: " + this.estado);
     }
 
-    // Getters
+    private void validarEstado(String estado) {
+        if (!ESTADO_EN_RECUPERACION.equals(estado) && !ESTADO_ADOPTABLE.equals(estado)) {
+            throw new IllegalArgumentException("Estado no válido: " + estado);
+        }
+    }
+
+    // Método abstracto (Abstracción): obliga a las subclases a implementarlo (Polimorfismo)
+    public abstract String obtenerCuidadosEspeciales();
+
+    // Método definido en el Diagrama de Clases de Diseño del TP2
+    public String getDatosCompletos() {
+        return "[ID: " + idMascota + "] Nombre: " + nombre + " | Edad: " + edad + 
+               " años | Estado: " + estado + " | Descripción: " + descripcion;
+    }
+
+    // Getters (Encapsulamiento)
     public int getIdMascota() { return idMascota; }
     public String getNombre() { return nombre; }
     public int getEdad() { return edad; }
     public String getEstado() { return estado; }
     public String getDescripcion() { return descripcion; }
     public int getIdAgente() { return idAgente; }
-
-    private void validarEstado(String estado) {
-        if (!ESTADO_EN_RECUPERACION.equals(estado) && !ESTADO_ADOPTABLE.equals(estado)) {
-            throw new IllegalArgumentException("Estado no válido: " + estado);
-        }
-    }
 }
