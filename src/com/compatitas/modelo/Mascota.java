@@ -22,7 +22,7 @@ public abstract class Mascota {
         this.idAgente = idAgente;
     }
 
-    public void validarEdad(int edad) {
+    public static void validarEdad(int edad) {
         if (edad < 0 || edad > 25) {
             throw new IllegalArgumentException("Edad no permitida.");
         }
