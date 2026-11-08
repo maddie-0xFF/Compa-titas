@@ -1,0 +1,16 @@
+=========================================================================
+               REPORTE OPERACIONAL - SISTEMA COMPA-TITAS                 
+               Fecha de generación: 08/11/2026 17:46:01
+=========================================================================
+
+--- 1. CATÁLOGO DE MASCOTAS PERSISTIDAS EN MYSQL (5) ---
+[ID: 1] Nombre: Pipo | Edad: 2 años | Estado: En recuperación | Descripción: Perrito mestizo encontrado con pata lastimada. | Especie: Perro (Tamaño: Mediano) - Requiere paseos diarios.
+[ID: 2] Nombre: Luna | Edad: 1 años | Estado: Adoptable | Descripción: Mestiza, muy juguetona y sociable. | Especie: Perro (Tamaño: Pequeño) - Requiere paseos diarios.
+[ID: 3] Nombre: Milo | Edad: 5 años | Estado: Adoptable | Descripción: Gato rubio, tranquilo, requiere dieta especial. | Especie: Gato - Requiere red de protección en ventanas/balcones.
+[ID: 4] Nombre: Michi | Edad: 3 años | Estado: Adoptable | Descripción: Gata tricolor rescatada, muy cariñosa. | Especie: Gato - Apto para vivienda sin red.
+[ID: 5] Nombre: Coco | Edad: 3 años | Estado: Adoptable | Descripción: Amigable | Especie: Perro (Tamaño: Mediano) - Requiere paseos diarios.
+
+--- 2. SOLICITUDES DE ADOPCIÓN REGISTRADAS EN MYSQL (2) ---
+Solicitud #1 | Interesado: Madelaine Dos Santos (madelaine.ds.01@gmail.com, Tel: 3544444444) | Mascota ID: 2 | Mensaje: "Estoy interesada en adoptar a Luna!"
+Solicitud #2 | Interesado: Madelaine (madelaine.ds.01@gmail.com, Tel: 3544689646) | Mascota ID: 5 | Mensaje: "Me podrias enviar mas detalles de Coco?"
+=========================================================================

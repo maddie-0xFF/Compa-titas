@@ -1,43 +1,47 @@
 package com.compatitas.modelo;
 
+import com.compatitas.excepciones.DatosInvalidosException;
+
 public class SolicitudAdopcion {
     private int idSolicitud;
     private String nombreInteresado;
     private String telefono;
     private String email;
     private String mensaje;
-    private int idMascota; // Clave foránea
+    private int idMascota;
 
-    public SolicitudAdopcion(int idSolicitud, String nombreInteresado, String telefono, String email, String mensaje, int idMascota) {
+    public SolicitudAdopcion(int idSolicitud, String nombreInteresado, String telefono, String email, String mensaje, int idMascota)
+            throws DatosInvalidosException {
         this.idSolicitud = idSolicitud;
         this.nombreInteresado = nombreInteresado;
         this.telefono = telefono;
         this.email = email;
         this.mensaje = mensaje;
         this.idMascota = idMascota;
+        validarDatos();
     }
 
-    public boolean registrarSolicitud() {
-        if (!validarDatos()) {
-            throw new IllegalArgumentException("Los datos de contacto (nombre y email) son obligatorios.");
+    public void validarDatos() throws DatosInvalidosException {
+        if (this.nombreInteresado == null || this.nombreInteresado.trim().isEmpty()) {
+            throw new DatosInvalidosException("El nombre del interesado es obligatorio.");
         }
-        System.out.println("Solicitud registrada con éxito de " + this.nombreInteresado + " para la mascota ID: " + this.idMascota);
-        return true;
-    }
-
-    public boolean validarDatos() {
-        return this.nombreInteresado != null && !this.nombreInteresado.trim().isEmpty() &&
-               this.email != null && !this.email.trim().isEmpty();
+        if (this.email == null || !this.email.contains("@")) {
+            throw new DatosInvalidosException("Debe ingresar un correo electrónico válido (con '@').");
+        }
+        if (this.telefono == null || this.telefono.trim().isEmpty()) {
+            throw new DatosInvalidosException("El teléfono de contacto es obligatorio.");
+        }
     }
 
     public String mostrarResumen() {
-        return "Solicitud #" + idSolicitud + " | Interesado: " + nombreInteresado + 
-               " (" + email + ", Tel: " + telefono + ") | Mascota ID: " + idMascota + 
+        return "Solicitud #" + idSolicitud + " | Interesado: " + nombreInteresado +
+               " (" + email + ", Tel: " + telefono + ") | Mascota ID: " + idMascota +
                " | Mensaje: \"" + mensaje + "\"";
     }
 
-    // Getters
+    // Getters y Setters
     public int getIdSolicitud() { return idSolicitud; }
+    public void setIdSolicitud(int idSolicitud) { this.idSolicitud = idSolicitud; }
     public String getNombreInteresado() { return nombreInteresado; }
     public String getTelefono() { return telefono; }
     public String getEmail() { return email; }

@@ -1,70 +1,60 @@
--- Creación de la base de datos
-CREATE DATABASE IF NOT EXISTS compatitas_db;
+-- ==========================================================
+-- SCRIPT DE CREACIÓN Y DATOS INICIALES - COMPA-TITAS (TP4)
+-- ==========================================================
+
+DROP DATABASE IF EXISTS compatitas_db;
+CREATE DATABASE compatitas_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE compatitas_db;
 
--- Tabla para el Actor: Agente Voluntario
-CREATE TABLE AgenteVoluntario (
+-- 1. Tabla de Agentes Voluntarios
+CREATE TABLE agentes_voluntarios (
     id_agente INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
-    email VARCHAR(150) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    email VARCHAR(100) NOT NULL UNIQUE,
+    contrasena VARCHAR(100) NOT NULL
 );
 
--- Tabla para las tarjetas de Mascotas
-CREATE TABLE Mascota (
+-- 2. Tabla de Mascotas (Soporta herencia de Perro y Gato)
+CREATE TABLE mascotas (
     id_mascota INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
-    estado ENUM('En recuperación', 'Adoptable') DEFAULT 'En recuperación',
-    descripcion TEXT,
-    id_agente INT,
-    FOREIGN KEY (id_agente) REFERENCES AgenteVoluntario(id_agente)
+    edad INT NOT NULL,
+    especie VARCHAR(20) NOT NULL, -- 'Perro' o 'Gato'
+    estado VARCHAR(50) NOT NULL,  -- 'En recuperación' o 'Adoptable'
+    descripcion TEXT NOT NULL,
+    tamanio VARCHAR(30) DEFAULT NULL,          -- Específico de Perro
+    requiere_red BOOLEAN DEFAULT NULL,         -- Específico de Gato
+    id_agente INT NOT NULL,
+    CONSTRAINT fk_mascota_agente FOREIGN KEY (id_agente) 
+        REFERENCES agentes_voluntarios(id_agente) ON DELETE CASCADE
 );
 
--- Tabla para almacenar los formularios de los Visitantes (Solicitudes)
-CREATE TABLE SolicitudAdopcion (
+-- 3. Tabla de Solicitudes de Adopción
+CREATE TABLE solicitudes_adopcion (
     id_solicitud INT AUTO_INCREMENT PRIMARY KEY,
     nombre_interesado VARCHAR(100) NOT NULL,
-    telefono VARCHAR(50),
-    email VARCHAR(150),
-    mensaje TEXT,
-    id_mascota INT,
-    FOREIGN KEY (id_mascota) REFERENCES Mascota(id_mascota)
+    telefono VARCHAR(40) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    mensaje TEXT NOT NULL,
+    fecha_solicitud TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    id_mascota INT NOT NULL,
+    CONSTRAINT fk_solicitud_mascota FOREIGN KEY (id_mascota) 
+        REFERENCES mascotas(id_mascota) ON DELETE CASCADE
 );
 
+-- ==========================================================
+-- INSERCIÓN DE DATOS INICIALES (DML)
+-- ==========================================================
 
--- Insertar un agente voluntario
-INSERT INTO AgenteVoluntario (nombre, email, password) 
-VALUES ('Camila', 'camila@compatitas.com', 'hash1234');
+INSERT INTO agentes_voluntarios (nombre, email, contrasena) VALUES 
+('Ana Rescatista', 'ana@compatitas.org', 'hash1234'),
+('Carlos Voluntario', 'carlos@compatitas.org', 'pass5678');
 
--- Insertar mascotas asociadas al agente (id_agente = 1)
-INSERT INTO Mascota (nombre, estado, descripcion, id_agente) 
-VALUES ('Luna', 'Adoptable', 'Mestiza, tamaño mediano, muy juguetona', 1),
-       ('Milo', 'En recuperación', 'Gato rubio, tranquilo, requiere dieta especial', 1);
+INSERT INTO mascotas (nombre, edad, especie, estado, descripcion, tamanio, requiere_red, id_agente) VALUES 
+('Pipo', 2, 'Perro', 'En recuperación', 'Perrito mestizo encontrado con pata lastimada.', 'Mediano', NULL, 1),
+('Luna', 1, 'Perro', 'Adoptable', 'Mestiza, muy juguetona y sociable.', 'Pequeño', NULL, 1),
+('Milo', 5, 'Gato', 'En recuperación', 'Gato rubio, tranquilo, requiere dieta especial.', NULL, TRUE, 1),
+('Michi', 3, 'Gato', 'Adoptable', 'Gata tricolor rescatada, muy cariñosa.', NULL, FALSE, 2);
 
--- Insertar una solicitud de adopción para la mascota Luna (id_mascota = 1)
-INSERT INTO SolicitudAdopcion (nombre_interesado, telefono, email, mensaje, id_mascota) 
-VALUES ('Juan Pérez', '3515551234', 'juan@email.com', 'Me encantaría adoptar a Luna.', 1);
-
-
-
--- Consultar las solicitudes cruzando datos con la mascota y el agente a cargo
-SELECT 
-    s.nombre_interesado AS 'Interesado',
-    s.email AS 'Contacto',
-    m.nombre AS 'Mascota Solicitada',
-    m.estado AS 'Estado Actual',
-    a.nombre AS 'Agente Responsable'
-FROM 
-    solicitudes_adopcion s
-JOIN 
-    Mascota m ON s.id_mascota = m.id_mascota
-JOIN 
-    AgenteVoluntario a ON m.id_agente = a.id_agente;
-
-
--- Se borran en orden inverso a la creación para no romper la integridad referencial
-DELETE FROM solicitudes_adopcion; 
-DELETE FROM mascotas; 
-DELETE FROM agentes_voluntarios;
-
+INSERT INTO solicitudes_adopcion (nombre_interesado, telefono, email, mensaje, id_mascota) VALUES 
+('Madelaine Dos Santos', '3544444444', 'madelaine.ds.01@gmail.com', 'Estoy interesada en adoptar a Luna!', 2);

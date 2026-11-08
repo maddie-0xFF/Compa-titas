@@ -1,8 +1,8 @@
 package com.compatitas.modelo;
 
+import com.compatitas.excepciones.DatosInvalidosException;
+
 public class AgenteVoluntario {
-    private static int siguienteIdMascota = 1;
-    
     private int idAgente;
     private String nombre;
     private String email;
@@ -19,20 +19,18 @@ public class AgenteVoluntario {
         return this.email.equalsIgnoreCase(email) && this.contrasena.equals(pass);
     }
 
-    // Sobrecarga 1: Registrar un Perro (CU02)
-    public Mascota registrarNuevaMascota(String nombre, int edad, String estado, String descripcion, String tamanio) {
-        System.out.println("El agente " + this.nombre + " está registrando al perro " + nombre + "...");
-        Perro nuevoPerro = new Perro(siguienteIdMascota++, nombre, edad, estado, descripcion, this.idAgente, tamanio);
-        System.out.println("Mascota registrada exitosamente.");
-        return nuevoPerro;
+    // Polimorfismo por Sobrecarga 1: Crear instancia de Perro (el ID definitivo lo asigna MySQL)
+    public Perro registrarNuevaMascota(String nombre, int edad, String estado, String descripcion, String tamanio)
+            throws DatosInvalidosException {
+        System.out.println("El agente " + this.nombre + " está preparando el registro del perro " + nombre + "...");
+        return new Perro(0, nombre, edad, estado, descripcion, this.idAgente, tamanio);
     }
 
-    // Sobrecarga 2: Registrar un Gato (CU02)
-    public Mascota registrarNuevaMascota(String nombre, int edad, String estado, String descripcion, boolean requiereRed) {
-        System.out.println("El agente " + this.nombre + " está registrando al gato " + nombre + "...");
-        Gato nuevoGato = new Gato(siguienteIdMascota++, nombre, edad, estado, descripcion, this.idAgente, requiereRed);
-        System.out.println("Mascota registrada exitosamente.");
-        return nuevoGato;
+    // Polimorfismo por Sobrecarga 2: Crear instancia de Gato (el ID definitivo lo asigna MySQL)
+    public Gato registrarNuevaMascota(String nombre, int edad, String estado, String descripcion, boolean requiereRed)
+            throws DatosInvalidosException {
+        System.out.println("El agente " + this.nombre + " está preparando el registro del gato " + nombre + "...");
+        return new Gato(0, nombre, edad, estado, descripcion, this.idAgente, requiereRed);
     }
 
     // Getters
